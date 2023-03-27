@@ -6,14 +6,24 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'title',
-      title: 'Title',
+      name: 'name',
+      title: 'Name of the Dish',
       type: 'string',
     }),
     defineField({
-      name: 'description',
-      title: 'Description',
-      type: 'text',
+      name: 'short_description',
+      title: 'Short description',
+      type: 'string',
+    }),
+    defineField({
+      name: 'price',
+      title: 'Price of the Dish in GBP',
+      type: 'string',
+    }),
+    defineField({
+      name: 'image',
+      title: 'Image of the Dish',
+      type: 'image',
     }),
   ],
 })
