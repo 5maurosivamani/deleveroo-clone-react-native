@@ -36,19 +36,25 @@ export default defineType({
       name: 'address',
       title: 'Address',
       type: 'string',
-      validation: (Rule) => Rule.required().max(300).error("Maximum 300 character only allowed!"),
+      validation: (Rule) => Rule.required().max(300).error('Maximum 300 character only allowed!'),
     }),
     defineField({
       name: 'rating',
       title: 'Rating',
       type: 'number',
-      validation: (Rule) => Rule.min(1).max(5).error("Please enter between 1 to 5"),
+      validation: (Rule) => Rule.min(1).max(5).error('Please enter between 1 to 5'),
     }),
     defineField({
       name: 'type',
       title: 'Category',
       type: 'reference',
-      to: [{type:"category"}]
-    })
+      to: [{type: 'category'}],
+    }),
+    defineField({
+      name: 'dishes',
+      title: 'Dishes',
+      type: 'array',
+      of: [{type: 'reference', to: [{type: "dish"}]}],
+    }),
   ],
 })
