@@ -7,7 +7,7 @@ import {
   TextInput,
   ScrollView,
 } from "react-native";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {
   ChevronDownIcon,
@@ -16,8 +16,11 @@ import {
   MagnifyingGlassIcon,
 } from "react-native-heroicons/outline";
 import { Categories, Featured } from "../components";
+import sanityClient from "../../sanity"
 
 export default function HomeScreen() {
+  const [featuredCategories, setFeaturedCategories] = useState([]);
+
   const navigation = useNavigation();
 
   useLayoutEffect(() => {
@@ -26,6 +29,24 @@ export default function HomeScreen() {
     });
   }, []);
 
+  useEffect(() => {
+    sanityClient.fetch(
+      `
+        *[_type == "featured"]{
+          ...,
+          restaurent[]->{
+            ...,
+            dishes[]->   
+          }
+        }
+      `
+    ).then((data)=>{
+      setFeaturedCategories(data)
+    })
+  }, []);
+
+  console.log(featuredCategories);
+  
   return (
     <SafeAreaView className="bg-white pt-5">
       <ScrollView>
@@ -76,6 +97,17 @@ export default function HomeScreen() {
         </ScrollView>
 
         {/* Featured */}
+        {/* {
+          featuredCategories?.map(item=>(
+            <Featured
+            id={
+              item.
+            }
+            title="Featured"
+            description="Paid placement from our partners"
+          />
+          ))
+        } */}
         <Featured
           id="1"
           title="Featured"
