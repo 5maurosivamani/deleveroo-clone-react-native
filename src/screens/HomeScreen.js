@@ -6,6 +6,7 @@ import {
   Image,
   TextInput,
   ScrollView,
+  Button,
 } from "react-native";
 import React, { useLayoutEffect, useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -15,8 +16,11 @@ import {
   AdjustmentsVerticalIcon,
   MagnifyingGlassIcon,
 } from "react-native-heroicons/outline";
-import { Categories, Featured } from "../components";
-import sanityClient from "../../sanity"
+import { Categories, FeaturedRow } from "../components";
+import "url-search-params-polyfill";
+import 'react-native-url-polyfill/auto';
+
+import sanityClient from "../../sanity";
 
 export default function HomeScreen() {
   const [featuredCategories, setFeaturedCategories] = useState([]);
@@ -30,8 +34,9 @@ export default function HomeScreen() {
   }, []);
 
   useEffect(() => {
-    sanityClient.fetch(
-      `
+    sanityClient
+      .fetch(
+        `
         *[_type == "featured"]{
           ...,
           restaurent[]->{
@@ -40,13 +45,13 @@ export default function HomeScreen() {
           }
         }
       `
-    ).then((data)=>{
-      setFeaturedCategories(data)
-    })
+      )
+      .then((data) => {
+        setFeaturedCategories(data);
+      });
   }, []);
 
-  console.log(featuredCategories);
-  
+
   return (
     <SafeAreaView className="bg-white pt-5">
       <ScrollView>
@@ -97,32 +102,16 @@ export default function HomeScreen() {
         </ScrollView>
 
         {/* Featured */}
-        {/* {
-          featuredCategories?.map(item=>(
-            <Featured
-            id={
-              item.
-            }
-            title="Featured"
-            description="Paid placement from our partners"
+        {featuredCategories?.map(category => (
+          <FeaturedRow
+            id={category._id}
+            key={category._id}
+            title={category.name}
+            description={category.short_description}
+
           />
-          ))
-        } */}
-        <Featured
-          id="1"
-          title="Featured"
-          description="Paid placement from our partners"
-        />
-        <Featured
-          id="2"
-          title="Tasty Discounts"
-          description="Eveyone's been enjoying those juice discounts!"
-        />
-        <Featured
-          id="3"
-          title="Offers near you!"
-          description="Why not support your local restaurant tonight!"
-        />
+        ))}
+        
       </ScrollView>
     </SafeAreaView>
   );
